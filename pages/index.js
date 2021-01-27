@@ -1,65 +1,145 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import React from "react";
+import { useState, useLayoutEffect, useRef, useEffect } from 'react';
+import Filters from "../components/Filters";
+import Head from 'next/head';
+import CardList from '../components/CardList';
+export default function Home({ data, queryParams }) {
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+  const [missions, setMissions] = useState([]);
+  const [filters, setFilters] = useState({
+    "launch_year": '',
+    "launch_success": '',
+    "land_success": '',
+  });
+  const initialRender = useRef(true);
+  useEffect(() => {
+    if (queryParams) {
+      
+      let updatedFilters = {};
+    updatedFilters = { ...filters };
+      if (queryParams.launch_year) {
+        updatedFilters.launch_year = queryParams.launch_year
+      }
+      if (queryParams.launch_success) {
+        updatedFilters.launch_success=queryParams.launch_success
+      }
+      if (queryParams.land_success) {
+        updatedFilters.land_success=queryParams.land_success
+      }
+      setFilters(updatedFilters);
+      Object.keys(updatedFilters).forEach((key) => {
+        if (updatedFilters[key] == '') {
+          delete updatedFilters[key];
+        }
+      });
+      if (window) {
+        const url = new URL(window.location);
+        let searchParams = new URLSearchParams(updatedFilters);
+        url.search=searchParams;
+        window.history.replaceState({}, '', url);
+      }
+    }
+  }, [])
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+  
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+  useEffect(() => {
+    
+    if (initialRender.current) {
+      initialRender.current = false;
+      return;
+    }
+    async function fetchData() {
+      try {
+        const missionsDetails = await getData();
+        setMissions(missionsDetails.props.data)
+      } catch (e) {
+        console.log('Some error occured');
+      }
+    }
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+    fetchData();
+  }, [filters]);
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+  const changeFilters = (filterType, value)=> {
+    let updatedFilters = {};
+    updatedFilters = { ...filters };
+    updatedFilters[filterType] = value;
+    Object.keys(updatedFilters).forEach((key) => {
+      if (updatedFilters[key] == null) {
+        delete updatedFilters[key];
+      }
+    });
+    const url = new URL(window.location);
+    let searchParams = new URLSearchParams(updatedFilters);
+    url.search=searchParams;
+    window.history.replaceState({}, '', url);
+    setFilters(prevState=>({...prevState,[filterType]:value}));
+    
+    //let searchParams = new URLSearchParams(filters);
+    //window.location.search = searchParams.toString();
+    
+  };
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+ 
+    return (
+      <>
+        <Head>
+        <title>Spacex App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+        <meta name="Description" content="Space Launch Programs Application."></meta>
+        </Head>
+        <header>
+          <h1>SpaceX Launch Programs</h1>
+        </header>
 
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+        <main className="container">
+          <div className="filter">
+            <Filters
+              filters={filters}
+              changeFilters={changeFilters}
+            />
+          </div>
+          <div className="cards">
+            <CardList missions={missions}/>
+          </div>
+        </main>
+        <footer className="footer">
+          <b>Developed by: </b> Vikram Singla
+        </footer>
+      </>
+    );
+  
+}
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+const getData = async (queryParams) =>{
+ 
+  let apiFilters = {};
+  if(queryParams){
+  let params = new URLSearchParams(queryParams);
+
+  if (params.get("launch_year")) {
+    apiFilters.launch_year = params.get("launch_year");
+  }
+  if (params.get("launch_success")) {
+    apiFilters.launch_success = params.get("launch_success");
+  }
+  if (params.get("land_success")) {
+    apiFilters.land_success = params.get("launch_landing");
+  }
+  }else{
+    apiFilters=window.location.search;
+  }
+    try {
+      const res = await fetch(`https://api.spaceXdata.com/v3/launches?limit=100&${new URLSearchParams(apiFilters).toString()}`);
+      const data = await res.json();
+      return {
+        props: { data, queryParams }
+      }
+    } catch (e) {
+      console.log(`Some error occurred`);
+    }
+}
+export async function getServerSideProps(ctx) {
+  return getData(ctx.query);
 }

@@ -1,0 +1,182 @@
+.launch-year {
+  display: grid;
+  grid-template-columns: minmax(25%, auto) minmax(25%, auto);
+  justify-content: space-between;
+  padding: 0 25px;
+  grid-gap: 25px;
+}
+
+.centre-filter {
+  font-size: 20px;
+  margin: 10px 25px;
+  text-align: center;
+  padding-bottom: 5px;
+  border-bottom: 1px solid black;
+  width: 75%;
+  display: inline-block;
+  font-weight: 500;
+}
+
+.grid-item-row {
+  margin-bottom: 5px;
+}
+.footer {
+  width: 100%;
+  height: 100px;
+  border-top: 1px solid #eaeaea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-row {
+  display: grid;
+  grid-gap: 25px;
+}
+
+input[type="checkbox"] {
+  opacity: 0;
+  position: fixed;
+  width: 0;
+}
+
+label {
+  display: inline-block;
+  background-color: rgb(197, 224, 155);
+  padding: 10px 20px;
+  font-family: sans-serif, Arial;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+input[type="checkbox"]:checked + label {
+  background-color: #7cba01;
+}
+input[type="checkbox"]:hover + label {
+  background-color: #7cba01;
+}
+.grid-item {
+  background-color: #fff;
+  border-radius: 8px;
+  font-weight: 500;
+  background-color: white;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+}
+.container {
+  display: grid;
+  grid-gap: 20px;
+}
+
+.left {
+  width: 25%;
+}
+
+.right {
+  width: 75%;
+}
+
+.filter {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px 10px 40px;
+  align-self: start;
+}
+.body {
+  flex: 0 1 78%;
+}
+.filter h1 {
+  margin: 5px 0px 0px 6px;
+}
+.sub-filter {
+  text-align: center;
+  margin: 5px 0 35px;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #f2f2f2;
+}
+.grid-item h3 {
+  display: inline-block;
+  margin: inherit;
+  font-weight: 500;
+  font-size: 18px;
+}
+.grid-item p {
+  font-weight: 400;
+  font-size: 18px;
+  display: inline-block;
+  margin: inherit;
+}
+.grid-item ul,
+h5 {
+  margin: auto;
+}
+header h1 {
+  margin-left: 16px;
+}
+
+.flight-name {
+  font-size: 18px;
+  color: #2f3a8d;
+}
+.filter h2 {
+  padding: 0 10px;
+  font-size: 22px;
+}
+@media only screen and (max-width: 1023px) and (min-width: 701px) {
+  .grid-item {
+    flex: 0 1 45%;
+  }
+
+  .filter h2 {
+    padding: 0 10px;
+    font-size: 22px;
+  }
+
+  .body {
+    flex: 0 1 59%;
+  }
+
+  .container {
+    grid-template-columns: minmax(auto, 30%) minmax(auto, 70%);
+  }
+  .grid-row {
+    grid-template-columns: repeat(2, calc(50% - 7.5px));
+    grid-gap: 10px;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .container {
+    grid-template-columns: minmax(auto, 20%) minmax(auto, 80%);
+  }
+  .grid-row {
+    grid-template-columns: repeat(4, calc(25% - 7.5px));
+    grid-gap: 10px;
+  }
+}
+@media only screen and (min-width: 701px) {
+  .filter {
+    padding: 10px 0 40px;
+    font-size: 8px;
+  }
+  .sub-filter {
+    margin: 5px 0 25px;
+  }
+  .launch-year {
+    padding: 0 20px;
+    grid-gap: 15px;
+  }
+  .centre-filter {
+    font-size: 18px;
+  }
+}
