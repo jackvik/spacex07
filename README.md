@@ -20,8 +20,8 @@ window.replaceState() is used to update the queryParams in the URL when filters 
 ## Technologies
 Project is created with:
 *HTML5
-*Next: 9.5.3,
-*React: 16.13.1
+*Next: 10.0.5,
+*React: 17.0.1
 *CSS
 
 **Using Lighthouse in Chrome DevTools**
