@@ -6,7 +6,7 @@ function Cards(props) {
     : [];
   return (
     <div className="grid-item">
-      <img
+      <img lazy="true"
         src={props.imgUrl}
         alt={props.missionName}
         style={{
