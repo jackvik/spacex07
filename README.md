@@ -26,4 +26,4 @@ Project is created with:
 
 **Using Lighthouse in Chrome DevTools**
 
-![lighthouse score](https://imgur.com/0Jnemmx)
+![lighthouse score](https://imgur.com/0Jnemmx.png)
